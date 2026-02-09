@@ -1,17 +1,129 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 1
+      HF Transmission Dashboard
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+    <ion-toolbar color="primary">
+      <ion-title size="large">HF Transmission</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- Connection Status -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Connection Status</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="status-indicator" [class.connected]="isConnected" [class.disconnected]="!isConnected">
+        <ion-icon [name]="isConnected ? 'wifi' : 'wifi-outline'"></ion-icon>
+        <span>{{ isConnected ? 'Connected' : 'Disconnected' }}</span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Server Configuration -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Server Configuration</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Server URL</ion-label>
+        <ion-input [(ngModel)]="serverUrl" placeholder="ws://localhost:8080" [disabled]="isConnected"></ion-input>
+      </ion-item>
+      <div class="button-group">
+        <ion-button expand="block" (click)="connect()" [disabled]="isConnected" color="success">
+          <ion-icon slot="start" name="play"></ion-icon>
+          Connect
+        </ion-button>
+        <ion-button expand="block" (click)="disconnect()" [disabled]="!isConnected" color="danger">
+          <ion-icon slot="start" name="stop"></ion-icon>
+          Disconnect
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Frequency Control -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Frequency Control</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Frequency (Hz)</ion-label>
+        <ion-input type="number" [(ngModel)]="frequency" [disabled]="!isConnected"></ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="updateFrequency()" [disabled]="!isConnected" color="warning">
+        <ion-icon slot="start" name="settings"></ion-icon>
+        Update Frequency: {{ frequency }} Hz
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Real-time Metrics -->
+  <ion-card *ngIf="metrics">
+    <ion-card-header>
+      <ion-card-title>Real-time Metrics</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <div class="metric-box">
+              <div class="metric-label">Packets Received</div>
+              <div class="metric-value">{{ metrics.packetsReceived }}</div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="metric-box">
+              <div class="metric-label">Packets Sent</div>
+              <div class="metric-value">{{ metrics.packetsSent }}</div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <div class="metric-box">
+              <div class="metric-label">Avg Latency (ms)</div>
+              <div class="metric-value">{{ metrics.averageLatency | number:'1.2-2' }}</div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="metric-box">
+              <div class="metric-label">Data Rate (pps)</div>
+              <div class="metric-value">{{ metrics.dataRate | number:'1.1-1' }}</div>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div class="metric-box">
+              <div class="metric-label">Connection Time (s)</div>
+              <div class="metric-value">{{ metrics.connectionTime / 1000 | number:'1.0-0' }}</div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Actions -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Actions</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button expand="block" (click)="resetMetrics()" color="medium">
+        <ion-icon slot="start" name="refresh"></ion-icon>
+        Reset Metrics
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

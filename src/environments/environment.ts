@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // High-Frequency Transmission Configuration
+  hfTransmission: {
+    serverUrl: 'ws://localhost:8080',
+    defaultFrequency: 100, // Hz
+    maxDataPoints: 1000,
+    reconnectAttempts: 5,
+    reconnectDelay: 3000, // ms
+  }
 };
 
 /*
