@@ -1,0 +1,8 @@
+{
+  "name": "HFRT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "d106f32e"
+}
