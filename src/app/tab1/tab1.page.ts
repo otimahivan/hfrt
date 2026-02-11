@@ -27,16 +27,14 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.frequency = this.hfService.getFrequency();
-    
     this.hfService.getConnectionStatus()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(status => {
+      .subscribe((status: boolean) => {
         this.isConnected = status;
       });
-
     this.hfService.getMetrics()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(metrics => {
+      .subscribe((metrics: TransmissionMetrics) => {
         this.metrics = metrics;
       });
   }
@@ -51,7 +49,7 @@ export class Tab1Page implements OnInit, OnDestroy {
       next: () => {
         console.log('Connected to HF transmission service');
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Connection error:', error);
       }
     });
@@ -81,7 +79,6 @@ export class Tab1Page implements OnInit, OnDestroy {
     if (!msg) {
       return;
     }
-
     // If the service exposes a sendMessage method, use it. Otherwise log.
     const svc: any = this.hfService as any;
     if (svc && typeof svc.sendMessage === 'function') {
@@ -93,13 +90,14 @@ export class Tab1Page implements OnInit, OnDestroy {
     } else {
       console.log('Message to send:', msg);
     }
-
     this.messageText = '';
     this.showComposer = false;
   }
 
   startPtt(): void {
-    if (this.isPttActive) { return; }
+    if (this.isPttActive) {
+      return;
+    }
     this.isPttActive = true;
     const svc: any = this.hfService as any;
     if (svc && typeof svc.startTransmit === 'function') {
@@ -113,7 +111,9 @@ export class Tab1Page implements OnInit, OnDestroy {
   }
 
   stopPtt(): void {
-    if (!this.isPttActive) { return; }
+    if (!this.isPttActive) {
+      return;
+    }
     this.isPttActive = false;
     const svc: any = this.hfService as any;
     if (svc && typeof svc.stopTransmit === 'function') {
@@ -160,7 +160,7 @@ export class Tab1Page implements OnInit, OnDestroy {
     }, 600);
   }
 
-  selectChannel(ev: any): void {
+  selectChannel(ev: { detail: { value: string } }): void {
     const ch = ev && ev.detail ? ev.detail.value : ev;
     this.selectedChannel = ch;
     const svc: any = this.hfService as any;
@@ -170,5 +170,4 @@ export class Tab1Page implements OnInit, OnDestroy {
       console.log('Channel selected:', ch);
     }
   }
-
 }
