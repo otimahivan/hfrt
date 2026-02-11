@@ -102,3 +102,41 @@ ion-item {
     }
   }
 }
+
+.message-composer {
+  margin-top: 12px;
+
+  ion-item {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .composer-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+}
+
+.rt-controls {
+  margin-top: 16px;
+
+  ion-button.active {
+    transform: scale(0.98);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+  }
+
+  .scan-results {
+    margin-top: 8px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  ion-select {
+    min-width: 110px;
+  }
+}

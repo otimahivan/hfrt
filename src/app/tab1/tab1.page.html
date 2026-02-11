@@ -123,6 +123,57 @@
         <ion-icon slot="start" name="refresh"></ion-icon>
         Reset Metrics
       </ion-button>
+        <ion-button expand="block" (click)="toggleComposer()" color="primary">
+          <ion-icon slot="start" name="chatbubble-ellipses"></ion-icon>
+          Message
+        </ion-button>
+
+        <div *ngIf="showComposer" class="message-composer">
+          <ion-item>
+            <ion-textarea placeholder="Write your message..." [(ngModel)]="messageText" rows="4"></ion-textarea>
+          </ion-item>
+          <div class="composer-actions">
+            <ion-button (click)="sendMessage()" color="success">Send</ion-button>
+            <ion-button fill="clear" (click)="toggleComposer()">Cancel</ion-button>
+          </div>
+        </div>
+
+        <!-- Push-To-Talk / Scan / Channel Select -->
+        <div class="rt-controls">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4">
+                <ion-button expand="block" color="danger"
+                  (mousedown)="startPtt()" (mouseup)="stopPtt()"
+                  (touchstart)="startPtt()" (touchend)="stopPtt()"
+                  [class.active]="isPttActive">
+                  <ion-icon slot="start" name="mic"></ion-icon>
+                  PTT
+                </ion-button>
+              </ion-col>
+
+              <ion-col size="4">
+                <ion-button expand="block" (click)="toggleScan()" [color]="isScanning ? 'warning' : 'tertiary'">
+                  <ion-icon slot="start" [name]="isScanning ? 'radio' : 'scan' "></ion-icon>
+                  {{ isScanning ? 'Scanning...' : 'Scan' }}
+                </ion-button>
+              </ion-col>
+
+              <ion-col size="4">
+                <ion-item lines="none">
+                  <ion-label>Channel</ion-label>
+                  <ion-select interface="popover" [(ngModel)]="selectedChannel" (ionChange)="selectChannel($event)">
+                    <ion-select-option *ngFor="let ch of channels" [value]="ch">{{ ch }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <div *ngIf="scanResults?.length" class="scan-results">
+            <ion-chip *ngFor="let f of scanResults">{{ f }}</ion-chip>
+          </div>
+        </div>
     </ion-card-content>
   </ion-card>
 
